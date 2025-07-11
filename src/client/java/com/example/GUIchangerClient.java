@@ -40,6 +40,13 @@ public class GUIchangerClient implements ClientModInitializer {
         }
         return false;
     }
+        public static boolean onMousePressedInScreen(int button) {
+        if (cycleKey != null && cycleKey.matchesMouse(button)) {
+            cycleInterfaceSizes(MinecraftClient.getInstance());
+            return true;
+        }
+        return false;
+    }
 
     private static void cycleInterfaceSizes(MinecraftClient client) {
         GameOptions options = client.options;

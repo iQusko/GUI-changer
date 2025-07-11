@@ -18,10 +18,10 @@ public class GUIchangerClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         cycleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.interfacescale.cycle",
+            "Toggle GUI Scale",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_C,
-            "category.interfacescale"
+            "Simple GUI Changer"
         ));
 
         // Для игрового мира (когда нет открытого GUI)
@@ -40,9 +40,14 @@ public class GUIchangerClient implements ClientModInitializer {
         }
         return false;
     }
-        public static boolean onMousePressedInScreen(int button) {
+    public static boolean onMousePressedInScreen(int button) {
+        MinecraftClient client = MinecraftClient.getInstance();
         if (cycleKey != null && cycleKey.matchesMouse(button)) {
-            cycleInterfaceSizes(MinecraftClient.getInstance());
+            if (client.currentScreen == null) {
+                return false; // Не обрабатываем нажатия мыши, если нет открытого GUI
+            } else {
+                cycleInterfaceSizes(MinecraftClient.getInstance());
+            }
             return true;
         }
         return false;
@@ -54,7 +59,7 @@ public class GUIchangerClient implements ClientModInitializer {
         int next = current + 1;
         if (next > MAX_SCALE) next = MIN_SCALE;
         options.getGuiScale().setValue(next);
-        showMessage(client, "message.interfacescale.set", next);
+        showMessage(client, "GUI scale "+next, next);
     }
 
     private static void showMessage(MinecraftClient client, String key, Object... args) {
